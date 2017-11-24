@@ -13,13 +13,15 @@
   "keywords": [],
   "main": "index.js",
   "jsnext:main": "index.es.js",
+  "moduleName": "fova",
   "babel": {
     "presets": [
       "latest",
       "stage-0"
     ],
     "plugins": [
-      "transform-runtime"
+      "transform-runtime",
+      "external-helpers"
     ]
   },
   "eslintConfig": {
@@ -33,6 +35,7 @@
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
@@ -58,6 +61,7 @@
     "test:cover": "babel-node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "node tools/build",
+    "build:umd": "node tools/build",
     "prepublish": "npm run build",
     "publish:docs": "easystatic deploy docs --repo sunel/fova.js",
     "start": "easystatic start docs"
