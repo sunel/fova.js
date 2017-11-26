@@ -1,3 +1,4 @@
+import sizzle from 'sizzle';
 
 class Selector {
 
@@ -5,8 +6,8 @@ class Selector {
     this.expression = expression;
   }
 
-  match() {
-    return `Welcome, ${this.name}!`;
+  matchs(context = document) {
+    return sizzle(this.expression, context);
   }
 
 }

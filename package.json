@@ -11,8 +11,7 @@
   ],
   "license": "MIT",
   "keywords": [],
-  "main": "index.js",
-  "jsnext:main": "index.es.js",
+  "main": "fova.js",
   "moduleName": "fova",
   "babel": {
     "presets": [
@@ -24,7 +23,16 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "optionalDependencies": false,
+          "peerDependencies": false
+        }
+      ]
+    }
   },
   "dependencies": {},
   "devDependencies": {
@@ -45,15 +53,19 @@
     "mocha": "^3.1.2",
     "mocha-jsdom": "^1.1.0",
     "sinon": "^2.0.0-pre.3",
+    "sizzle": "^2.3.3",
+    "validator": "^9.1.2",
     "webpack": "^3.8.1"
   },
   "scripts": {
+    "build": "webpack",
+    "build:pkg": "node ./tools/build-pkg.js && npm run build",
+    "dev": "webpack --progress --colors --watch",
     "lint": "eslint src test",
     "test": "mocha --compilers js:babel-register",
     "test:watch": "mocha --compilers js:babel-register --reporter min --watch",
     "test:cover": "babel-node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "webpack": "webpack",
     "publish:docs": "easystatic deploy docs --repo sunel/fova.js",
     "start": "easystatic start docs"
   }

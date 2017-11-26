@@ -4,26 +4,15 @@ const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const pkg = require('./package.json');
 
-const nodeEnv = process.env.NODE_ENV || 'production';
-
-const libraryName = pkg.moduleName;
-
-const plugins = [];
-let outputFile;
-
-if (nodeEnv === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = `${libraryName}.min.js`;
-} else {
-  outputFile = `${libraryName}.js`;
-}
-
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    'fova.js': './src/index.js',
+    'fova.min.js': './src/index.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: outputFile,
-    library: libraryName,
+    filename: '[name]',
+    library: pkg.moduleName,
     libraryTarget: 'umd',
     umdNamedDefine: true,
   },
@@ -41,9 +30,19 @@ module.exports = {
     modules: [path.resolve('./node_modules'), path.resolve('./src')],
     extensions: ['.json', '.js'],
   },
-  plugins,
+  plugins: [
+    new UglifyJsPlugin({
+      test: /\.min\.js$/,
+      compress: { warnings: false },
+      output: { comments: false },
+    }),
+  ],
   stats: {
     colors: true,
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false,
   },
   devtool: 'source-map',
 };
