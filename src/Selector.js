@@ -2,8 +2,7 @@ import sizzle from 'sizzle';
 
 class Selector {
 
-  constructor(expression) {
-    this.expression = expression;
+  constructor() {
     Selector.addFormPseudos();
   }
 
@@ -49,8 +48,8 @@ class Selector {
     };
   }
 
-  matchs(context = document) {
-    return sizzle(this.expression, context);
+  find(expression, context = document) {
+    return sizzle(expression, context);
   }
 
 }

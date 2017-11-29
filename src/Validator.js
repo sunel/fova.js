@@ -1,6 +1,8 @@
 
 import Selector from './Selector';
 import BaseValidator from './Rules';
+import defaultOptions from './Options';
+import InputValidator from './Validators/Input';
 
 const version = '0.0.0';
 
@@ -8,35 +10,21 @@ class Validator {
 
   constructor() {
     this.version = version;
-    this.validator = this;
-    this.context = [];
+    this.options = defaultOptions;
+    this.selector = new Selector();
     Object.assign(this, BaseValidator);
   }
 
-  check(form) {
-    this.context = Validator.select(form);
-    return this;
+  setDefaults(options) {
+    Object.assign(this.options, options);
   }
 
-  valid() {
-    const promise = new Promise((resolve, reject) => {
-      if (!this.context.length) {
-        reject('Context to be validated is not given');
-      }
-      this.validateForm(resolve, reject);
-      resolve(this.context, this.validator);
-    });
-    return promise;
+  check(element) {
+    return new InputValidator(this.select(element), this);
   }
 
-  validateForm(resolve, reject) {
-    this.context.forEach((form) => {
-      console.log(Validator.select(':input, [contenteditable]', form));
-    });
-  }
-
-  static select(expression, context) {
-    return new Selector(expression).matchs(context);
+  select(expression, context) {
+    return this.selector.find(expression, context);
   }
 
 }
