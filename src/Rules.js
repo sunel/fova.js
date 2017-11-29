@@ -3,8 +3,6 @@ import toFloat from 'validator/lib/toFloat';
 import toInt from 'validator/lib/toInt';
 import toBoolean from 'validator/lib/toBoolean';
 import equals from 'validator/lib/equals';
-import contains from 'validator/lib/contains';
-import matches from 'validator/lib/matches';
 
 import isEmail from 'validator/lib/isEmail';
 import isURL from 'validator/lib/isURL';
@@ -73,34 +71,11 @@ import isDataURI from 'validator/lib/isDataURI';
 
 import isLatLong from 'validator/lib/isLatLong';
 import isPostalCode from 'validator/lib/isPostalCode';
-
-import ltrim from 'validator/lib/ltrim';
-import rtrim from 'validator/lib/rtrim';
-import trim from 'validator/lib/trim';
-import escape from 'validator/lib/escape';
-import unescape from 'validator/lib/unescape';
-import stripLow from 'validator/lib/stripLow';
-import whitelist from 'validator/lib/whitelist';
-import blacklist from 'validator/lib/blacklist';
 import isWhitelisted from 'validator/lib/isWhitelisted';
-
-import normalizeEmail from 'validator/lib/normalizeEmail';
 
 import toString from 'validator/lib/util/toString';
 
 const validator = {
-  equals,
-  contains,
-  matches,
-  ltrim,
-  rtrim,
-  trim,
-  escape,
-  unescape,
-  stripLow,
-  whitelist,
-  blacklist,
-  normalizeEmail,
   to: {
     date: toDate,
     float: toFloat,
@@ -110,6 +85,7 @@ const validator = {
   },
   is: {
     email: isEmail,
+    equals,
     url: isURL,
     macAddress: isMACAddress,
     ip: isIP,
