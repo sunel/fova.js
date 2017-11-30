@@ -4,6 +4,7 @@ import toInt from 'validator/lib/toInt';
 import toBoolean from 'validator/lib/toBoolean';
 import equals from 'validator/lib/equals';
 
+import isRequired from './Rules/isRequired';
 import isEmail from 'validator/lib/isEmail';
 import isURL from 'validator/lib/isURL';
 import isMACAddress from 'validator/lib/isMACAddress';
@@ -84,6 +85,7 @@ const validator = {
     string: toString,
   },
   is: {
+    required: isRequired,
     email: isEmail,
     equals,
     url: isURL,
