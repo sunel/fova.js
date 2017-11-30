@@ -1,4 +1,5 @@
 import trim from 'validator/lib/trim';
+import sizzle from 'sizzle';
 
 const rnotwhite = /\S+/g;
 const rclass = /[\t\r\n]/g;
@@ -65,9 +66,61 @@ export function insertAfter(newElement, targetElement) {
 
 export function extractParams(funcName) {
   const indexOfParams = funcName.indexOf('(');
+  if (indexOfParams === -1) {
+    return [funcName];
+  }
   const params = funcName
     .slice(indexOfParams + 1, -1).replace(/\s+/, '');
   return [funcName.slice(0, indexOfParams), params.indexOf(',') !== -1
     ? params.split(',')
-    : [params]];
+    : params];
+}
+
+export function getValue(element, form) {
+  const type = element.type;
+
+  if (type === 'radio' || type === 'checkbox') {
+    if (!element.name) {
+      return '';
+    }
+    const inputs = sizzle(`[name=${element.name}]:checked`, form);
+    return (inputs.length) ? inputs[0].value : '';
+  }
+
+  let val = null;
+  let idx = null;
+  if (element.hasAttribute('contenteditable')) {
+    val = element.textContent;
+  } else {
+    val = element.value;
+  }
+
+  if (type === 'file') {
+    // Modern browser (chrome & safari)
+    if (val.substr(0, 12) === 'C:\\fakepath\\') {
+      return val.substr(12);
+    }
+
+    // Legacy browsers
+    // Unix-based path
+    idx = val.lastIndexOf('/');
+    if (idx >= 0) {
+      return val.substr(idx + 1);
+    }
+
+    // Windows-based path
+    idx = val.lastIndexOf('\\');
+    if (idx >= 0) {
+      return val.substr(idx + 1);
+    }
+
+    // Just the file name
+    return val;
+  }
+
+  if (typeof val === 'string') {
+    return val.replace(/\r/g, '');
+  }
+
+  return val;
 }
