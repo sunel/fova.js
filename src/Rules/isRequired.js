@@ -1,6 +1,7 @@
+import isEmpty from 'validator/lib/isEmpty';
 
 function isRequired(str) {
-  return (str.length > 0);
+  return !isEmpty(str);
 }
 
 export default isRequired;
