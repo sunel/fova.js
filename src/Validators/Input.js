@@ -4,24 +4,32 @@ class Input {
   constructor(context, validator) {
     this.context = context;
     this.validator = validator;
+    this.erros = {};
   }
 
   valid() {
-    const promise = new Promise((resolve, reject) => {
-      if (!this.context.length) {
-        reject('Context to be validated is not given');
-      }
-      this.validateElem(resolve, reject);
-    });
-    return promise;
+    if (!this.context.length) {
+      throw Error('Context to be validated is not given');
+    }
+
+    if (!this.context.length === 1) {
+      return this.validateElem(this.context[0]);
+    }
+
+    return this.validateGroupElem(this.context);
   }
 
-  validateElem(resolve, reject) {
-    this.context.forEach((form) => {
-      const elements = this.validator.select(`:selectElem(:not(${this.validator.options.ignore}):split:formEle)`, form);
-      const valid = elements.every(element => this.checkIfvalid(element));
-      resolve(valid, form, []);
+  validateElem(elem) {
+    if (elem.tagName === 'FORM') {
+
+    }
+    const elements = this.validator.select(`:selectElem(:not(${this.validator.options.ignore}):split:formEle)`, form);
+    let valid = false;
+    elements.forEach((element) => {
+      valid = this.checkIfvalid(element);
     });
+
+    return valid;
   }
 
   checkIfvalid(element, form) {
@@ -53,12 +61,14 @@ class Input {
 
   error(element, form, ruleName, args) {
     const options = this.validator.options;
+    const message = formatMessage(this.validator.messages[ruleName], args);
     options.highlight(element);
     const error = document.createElement(options.errorElement);
     error.setAttribute('id', `${getIdOrName(element)}-error`);
     addClass(error, options.errorClass);
-    error.innerHTML = formatMessage(this.validator.messages[ruleName], args);
+    error.innerHTML = message;
     options.errorPlacement(error, element);
+    return message;
   }
 
   prepareElement(element, form) {
